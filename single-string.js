@@ -18,10 +18,11 @@ var SingleStringPlugin = function(data, config){
         /* make array from each key/object pair in phrases, sequentially */
         phrase_array = Object.entries(phrases)[i];
 
+        /* make function to evaluate */
+        eval_func = "(function(input, user) {that.bot.emit('do:commandResponse', '" + phrase_array[1] + "'); })";
+        
         /* build function for each phrase in phrases */ 
-        that.commands[phrase_array[0]] = function(input, user) { 
-            that.bot.emit("do:commandResponse", phrase_array[1]);
-        };
+        that.commands[phrase_array[0]] = eval_func;
     };
 
     return that;
