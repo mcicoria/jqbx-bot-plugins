@@ -7,7 +7,7 @@ var SingleStringPlugin = function(data, config){
     Object.assign(that.config, data.config, config || {});
 
     phrases = {
-        "/shrug": "Â¯\_(ã)_/Â¯",
+        "/shrug": "¯\_(ツ)_/¯",
         "/shots": "SHOTS"
     };
 
