@@ -93,7 +93,7 @@ var BTCPlugin = function(data){
        
         "/btc": function(input, user) {
             if(input && input.toLowerCase() == "extra") {
-                btcExtra();
+                //btcExtra();
             } else if(input){
                 getCurrentBTCPrice();
                 that.bot.once("btc: price", function(data){
