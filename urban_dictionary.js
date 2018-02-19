@@ -41,6 +41,7 @@ var UrbanDictionaryPlugin = function (data) {
             }
             else {
                 response = 'Use "/urban word" to get a definition.';
+                that.bot.emit("do:commandResponse", response);
             }
         }
     };
