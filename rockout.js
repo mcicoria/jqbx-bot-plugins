@@ -14,8 +14,9 @@ var rockoutPlugin = function(data){
     that.bot = data.bot;
     
     that.help = {
-            "/ro": "Votes for the bot to rock out (dope) a song"
+            "/ro": "Votes for the bot to rock out (dope) a song. Requires 3 people."
         };
+
 
     
     function processVote (spotifyURI){
@@ -52,9 +53,13 @@ var rockoutPlugin = function(data){
                 if(vote >= requiredVotes){
                     rockOut();
                 }
+                if(vote == 1) that.bot.emit("do:commandResponse","row");
+                if(vote == 2) that.bot.emit("do:commandResponse","row, row");
             }else{
                 var str = "I'm either already bopping, or you already voted.";
-                that.bot.emit("do:commandResponse", str, str, that.bot.room.id, user, null, null, [{uri: user.uri}]);
+                that.bot.emit("do:commandResponse", str, null, null, null, null, null, [
+                    {uri: user.uri}
+                ]);
             }
 
             
