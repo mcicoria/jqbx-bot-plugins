@@ -26,7 +26,9 @@ var UrbanDictionaryPlugin = function (data) {
                 str = "There aren't enough definitions."
             }
 
-            that.bot.emit("do:commandResponse", str);
+            that.bot.emit("do:commandResponseExpandable", str, {
+                htmlMessage: str.split("\n").join("<br/><br/>")
+            });
         });
     }
 
@@ -41,7 +43,7 @@ var UrbanDictionaryPlugin = function (data) {
             }
             else {
                 response = 'Use "/urban word" to get a definition.';
-                that.bot.emit("do:commandResponse", response);
+                that.bot.emit("do:commandResponsePM", response, [user]);
             }
         }
     };
