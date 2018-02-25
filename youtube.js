@@ -4,7 +4,7 @@ var config = require('../config');
 const 
     _description = "Get a video URL from youtube matching the currently playing song. - by @Captian Internet",
     _help = {
-        "/youtube (search)": "Get a video URL from youtube matching the currently playing song. Using arguments will return a video based on search terms. - by @Captian Internet"
+        "/yt (search)": "Get a video URL from youtube matching the currently playing song. Using arguments will return a video based on search terms. - by @Captian Internet"
     }
 ;
 
