@@ -31,8 +31,9 @@ var DadJokePlugin = function (data) {
             if (resp.body.joke) {
                 str = resp.body.joke;
             }else if(resp.body.results[0]){
-                var rand = Math.floor(Math.random() * resp.body.results.length);
+                var rand = Math.floor(Math.random() * (resp.body.results.length-1));
                 // console.log(resp.body.results[rand].joke);
+                if(resp.body.results[rand]) str = resp.body.results[rand].joke;
             }else {
                 str = "No yolks could be found."
             }
