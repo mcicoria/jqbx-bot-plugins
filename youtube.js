@@ -1,4 +1,5 @@
 var search = require('youtube-search');
+var info = require('youtube-info');
 var config = require('../config');
 
 const 
@@ -20,10 +21,41 @@ var YouTubePlugin = function (data) {
     that.help = _help;
  
     var opts = {
-        maxResults: 1,
+        maxResults: 5,
         key: config.youtube.key,
-        type: "video"
+        type: "video",
+        part: "snippet"
     };
+
+    var i = 0;
+    var thresholdMs = 20 * 1000;
+    var diffMinIndex = 0;
+    var diffMinValue = 9999;
+    var durations = [];
+    var getInfo = function(results, cb) {
+
+        info(results[i].id, function(err, videoInfo) {
+            if (err) return cb(err);
+
+            var videoDurationMs = videoInfo.duration * 1000
+            var diff = Math.abs(that.data.currentTrack.duration_ms - videoDurationMs);
+            
+            if (diff < thresholdMs) {
+                return cb(err, results[i], videoDurationMs);
+            } else if (diff < diffMinValue) {
+                diffMinValue = diff;
+                diffMinIndex = i;
+            }
+
+            i++;
+            if (i < results.length) {
+                durations.push(videoDurationMs);
+                getInfo(results, cb, videoDurationMs);
+            } else {
+                return cb(err, results[diffMinIndex], durations[diffMinIndex]);
+            }
+        });
+    }
 
     that.searchYT = function(terms) {
         
@@ -31,18 +63,20 @@ var YouTubePlugin = function (data) {
             if (err) return that.bot.emit("error", err);
             
             var str = "No data.";
-
-            if (results[0].link && results[0].title) {
-                str = results[0].title + " : " + results[0].link;
-            }
-            else {
-                str = "Couldn't find video."
-            }
-
-            that.bot.emit("do:commandResponseExpandable", str, {
-                htmlMessage: str.split("\n").join("<br/><br/>")
+            
+            getInfo(results, function(err, result, durationMs) {
+                console.log(result, durationMs);
+                if (result.link && result.title) {
+                    str = result.title + " : " + result.link;
+                }
+                else {
+                    str = "Couldn't find video."
+                }
+    
+                that.bot.emit("do:commandResponseExpandable", str, {
+                    htmlMessage: str.split("\n").join("<br/><br/>")
+                });
             });
-
         });
     
     };
@@ -70,7 +104,7 @@ YouTubePlugin.description = _description;
 
 module.exports = YouTubePlugin;
 
-// // This can be tested locally, like so:
+// This can be tested locally, like so:
 // var YT = new YouTubePlugin({
 //     bot:{
 //         on: console.log,
@@ -79,10 +113,11 @@ module.exports = YouTubePlugin;
 //     currentTrack: {
 //         artists: [
 //             {
-//                 name: "Cage The Elephant"
+//                 name: "Chronic Future"
 //             }
 //         ],
-//         name: "James Brown"
+//         name: "Static Future",
+//         duration_ms: 217000
 //     }
 // });
 
