@@ -44,6 +44,7 @@ var TimePlugin = function(data){
 					response = "Current date and time in " + addr + " is " + localTime.toUTCString() + ".";
 				} else if(body.status == "REQUEST_DENIED") {
 					that.bot.emit("error", body.error_message);
+					return;
 
 				} else {
 					response = "Sorry, couldn't find timezone info for " + addr + ".";
@@ -58,8 +59,8 @@ var TimePlugin = function(data){
 			request.get({
 				url: geocodeURL,
 				qs: {
-					address:addr,
-					key:apikey
+					address: addr,
+					key: apikey
 				},
 				json: true
 			}, function(err, resp, body) {
@@ -79,6 +80,7 @@ var TimePlugin = function(data){
 
 				} else if(body.status == "REQUEST_DENIED") {
 					that.bot.emit("error", body.error_message);
+					return;
 
 				} else {
 					response = "Couldn't find a place called " + addr + ".";
