@@ -1,9 +1,17 @@
 var request = require('request');
+var config = require('../config');
 
-const apikey = "API_KEY";
+const apikey = config.google.key;
 
 const geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json"; //GET address=target
 const timezoneURL =  "https://maps.googleapis.com/maps/api/timezone/json"; //GET location=lat,lng, timestamp=current
+
+const 
+    _description = "Get local time of basically anywhere. - By @vmednis aka kweakzsz",
+    _help = {
+        "/time": "Displays the local time of anywhere. By @vmednis aka kweakzsz"
+    }
+;
 
 var TimePlugin = function(data){
 	    
@@ -11,9 +19,7 @@ var TimePlugin = function(data){
 
 	that.bot = data.bot;
 
-	that.help = {
-		"/time": "Displays the local time of anywhere. By @vmednis aka kweakzsz"
-	};
+	that.help = _help;
 
 
 	that.resolveTime = function(time, addr, geoloc) {
@@ -96,7 +102,7 @@ var TimePlugin = function(data){
 
 			//Validate user input
 			if(!input) {
-				that.bot.emit("do:commandResponse", "Usage: /time [location]");
+				that.bot.emit("do:commandResponsePM", "Usage: /time [location]");
 				return;
 			}
 
@@ -109,4 +115,25 @@ var TimePlugin = function(data){
 	return that;
 };
 
+TimePlugin.help = _help;
+TimePlugin.description = _description;
+
 module.exports = TimePlugin;
+
+// This can be tested locally, like so:
+// var TP = new TimePlugin({
+//     bot:{
+//         on: console.log,
+//         emit: console.log
+//     },
+//     currentTrack: {
+//         artists: [
+//             {
+//                 name: "Cage The Elephant"
+//             }
+//         ],
+//         name: "James Brown"
+//     }
+// });
+
+// TP.commands["/time"]("Las Vegas, NV", {uri: "123"});
