@@ -13,6 +13,11 @@ const
     }
 ;
 
+
+function atLeastTwoDigits(num) {
+	return num / 10 < 1 ? "0" + num : num;
+}
+
 var TimePlugin = function(data){
 	    
 	var that = this;
@@ -47,7 +52,8 @@ var TimePlugin = function(data){
 					
 					//Calculate the time from offsets
 					var localTime = new Date((time + dstOffset + rawOffset) * 1000);
-					response = "Current time in " + addr + " is " + localTime.getUTCHours() + ":" + localTime.getUTCMinutes() + ".";
+					response = "Current time in " + addr + " is " + atLeastTwoDigits(localTime.getUTCHours()) +
+					                                          ":" + atLeastTwoDigits(localTime.getUTCMinutes()) + ".";
 				} else if(body.status == "REQUEST_DENIED") {
 					that.bot.emit("error", body.error_message);
 					return;
