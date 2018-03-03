@@ -65,7 +65,7 @@ var YouTubePlugin = function (data) {
             var str = "No data.";
             
             getInfo(results, function(err, result, durationMs) {
-                console.log(result, durationMs);
+                
                 if (result.link && result.title) {
                     str = result.title + " : " + result.link;
                 }
