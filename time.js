@@ -47,7 +47,7 @@ var TimePlugin = function(data){
 					
 					//Calculate the time from offsets
 					var localTime = new Date((time + dstOffset + rawOffset) * 1000);
-					response = "Current date and time in " + addr + " is " + localTime.toUTCString() + ".";
+					response = "Current time in " + addr + " is " + localTime.getUTCHours() + ":" + localTime.getUTCMinutes() + ".";
 				} else if(body.status == "REQUEST_DENIED") {
 					that.bot.emit("error", body.error_message);
 					return;
@@ -75,8 +75,6 @@ var TimePlugin = function(data){
 					return;
 				} 
 
-				let response = "";
-
 				if(body.status == "OK") {
 					lat = body.results[0].geometry.location.lat;
 					lng = body.results[0].geometry.location.lng;
@@ -89,10 +87,10 @@ var TimePlugin = function(data){
 					return;
 
 				} else {
-					response = "Couldn't find a place called " + addr + ".";
+					let response = "Couldn't find a place called " + addr + ".";
+					that.bot.emit("do:commandResponse", response);
 				}
 
-				that.bot.emit("do:commandResponse", response);
 			});
 		}
 	}
