@@ -3,7 +3,9 @@ const
     _help = {
         "/hay": "Get a list of room ids for walkie-talkie messaging.",
         "/hay [room id] [message]": "Send a message to another room. Ex: /hay boteshop Hi there"
-    };
+    },
+    NOTICE_RATE = 60000*5 // 5 minutes
+;
 
 var WalkieTalkiePlugin = function(data) {
 
@@ -13,6 +15,8 @@ var WalkieTalkiePlugin = function(data) {
     that.data = data;
 
     that.help = _help;
+    that.lastNotices = {};
+
 
     that.displayRooms = function(input, user, message){
         var rooms = []; 
@@ -130,7 +134,7 @@ var WalkieTalkiePlugin = function(data) {
                 handle = that.data.room.handle || that.data.room.jqbx_id || that.bot.room.id,
                 title = that.data.room.title || that.bot.room.name || handle || "",
                 userMessage,
-                roomID = input.split(" ")[0]
+                roomID = input.split(" ")[0].trim()
             ;
 
             roomMessage += "Message from "+ title + ". ";
@@ -138,7 +142,13 @@ var WalkieTalkiePlugin = function(data) {
 
             userMessage = username + " ("+title+"): " + message.replace("@"+that.bot.user.username,"").split(" ").slice(2).join(" ");
             that.bot.emit("do:roomMessage", roomID, userMessage, user);
-            that.bot.emit("do:roomMessage", roomID, roomMessage, user, {type: "notice"});
+            
+
+            if(!that.lastNotices[roomID] || Date.now()-that.lastNotices[roomID] > NOTICE_RATE){
+                that.bot.emit("do:roomMessage", roomID, roomMessage, user, {type: "notice"});
+                that.lastNotices[roomID] = Date.now();
+            }
+            
         }
     };
 
