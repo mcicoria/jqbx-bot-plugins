@@ -1,199 +1,177 @@
-/*
- * name:    FactPlugin
- * by:      aeketn : JQBX Waddle Bird
- * date:    02/26/2018 
- * 
- * by:      mcicoria : Single plugin for facts
- * update:  03/03/2018
- */
+var request = require('request');
+var config = require('../config');
 
-var request = require("request");
+const apikey = config.google.key;
+
+const geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json"; //GET address=target
+const timezoneURL =  "https://maps.googleapis.com/maps/api/timezone/json"; //GET location=lat,lng, timestamp=current
 
 const 
-    _description = "Get a facts about today, a year, or number. - by @Waddle Bird",
+    _description = "Get local time of basically anywhere. - By @vmednis aka kweakzsz",
     _help = {
-        "/fact year [yyyy]": "Specify a year to get a fact about that year, or input nothing for a random year. - by @Waddle Bird",
-        "/fact num [#]": "Specify a number to get a fact about it, or input nothing for a random number fact. - by @Waddle Bird",
-        "/fact today": "Get a fact about today's date - by @Waddle Bird"
-    },
-    API_URL = "http://numbersapi.com/"
+        "/time": "Displays the local time of anywhere. By @vmednis aka kweakzsz"
+    }
 ;
 
-var FactPlugin = function (data) {
 
+function atLeastTwoDigits(num) {
+    return num / 10 < 1 ? "0" + num : num;
+}
+
+
+var TimePlugin = function(data){
+        
     var that = this;
+
     that.bot = data.bot;
+
     that.help = _help;
 
-    function yearFact(searchURL,n) {
+    that.getGeolocation = function(addr, done) {
         request.get({
-            url: searchURL,
-            json: true,
-            limit: n,
-            headers: {
-                'User-Agent': 'JQBX.FM Bot'
-            }
-        }, function (err, resp) {
-            if (err) return that.bot.emit("error", err);
-            var str = "Sorry, that year probably never happened.";
+            url: geocodeURL,
+            qs: {
+                address: addr,
+                key: apikey
+            },
+            json: true
+        }, function(err, resp, body) {
+            if(err) return done(err);
 
-            if (resp.body) {
-                str = resp.body;
-            } else {
-                str = "Sorry, that year probably never happened."
+
+            if(body.status != "OK") {
+                if(body.status == "REQUEST_DENIED") return done(body);
+                else return done(null, null);
             }
 
-            that.bot.emit("do:commandResponseExpandable", str, {
-                htmlMessage: str.split("\n").join("<br/><br/>")
-            });
+            var lat, lng; 
+
+            lat = body.results[0].geometry.location.lat;
+            lng = body.results[0].geometry.location.lng;
+
+            return done(null, { lat: lat, lng: lng });
+
         });
-    }
-
-    function numFact(searchURL,n) {
-        request.get({
-            url: searchURL,
-            json: true,
-            limit: n,
-            headers: {
-                'User-Agent': 'JQBX.FM Bot'
-            }
-        }, function (err, resp) {
-            if (err) return that.bot.emit("error", err);
-            var str = "Couldn't find your number... is it imaginary?";
-
-            if (resp.body) {
-                str = resp.body;
-            } else {
-                var str = "Couldn't find your number... is it imaginary?";
-            }
-
-            that.bot.emit("do:commandResponseExpandable", str, {
-                htmlMessage: str.split("\n").join("<br/><br/>")
-            });
-        });
-    }
-
-    function dateFact(searchURL,n) {
-        request.get({
-            url: searchURL,
-            json: true,
-            limit: n,
-            headers: {
-                'User-Agent': 'JQBX.FM Bot'
-            }
-        }, function (err, resp) {
-            if (err) return that.bot.emit("error", err);
-            var str = "Sorry, today does not exist. Try again tomorrow.";
-
-            if (resp.body) {
-                str = resp.body;
-            } else {
-                str = "Sorry, today does not exist. Try again tomorrow."
-            }
-
-            that.bot.emit("do:commandResponseExpandable", str, {
-                htmlMessage: str.split("\n").join("<br/><br/>")
-            });
-        });
-    }
-
-    that.subCommands = {
-        "year": function (input, user) {
-
-            if (input == parseInt(input, 10)) {
-                yearFact(API_URL + encodeURIComponent(input) + "/year", 20);
-            } else {
-                yearFact(API_URL+ "random/year", 20);
-            }
-
-            return true;
-        },
-        "num": function (input, user) {
-            var typeOfFact = "/trivia"
-            var rand = Math.floor(Math.random() * 2)
-
-            if (0 == rand) {
-                typeOfFact = "/math"
-            }
-
-            if (input == parseInt(input, 10)) {
-                numFact(API_URL + encodeURIComponent(input) + typeOfFact, 20);
-            } else {
-                numFact(API_URL + "random/" + typeOfFact, 20);
-            }
-
-            return true;
-        },
-        "today": function (input, user, message) {
-
-            var date = new Date();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            dateFact(API_URL + month + "/" + day, 20);
-
-            return true;
-        }
     };
 
+
+    that.getGeoTime = function(time, geoloc, done) {
+        
+        if(!geoloc) return;
+
+        //The geolocation of address is already known
+        request.get({
+            url: timezoneURL,
+            qs: {
+                location: geoloc.lat + "," + geoloc.lng,
+                timestamp: time,
+                key: apikey
+            },
+            json: true
+        }, function(err, resp, body) {
+            if(err) return done(err);
+
+            if(body.status != "OK") {
+                if(body.status == "REQUEST_DENIED") return done(body);
+                else return done(null, null);
+            }
+
+            return done(null, body);
+        });
+    };
+
+    that.formatGeoTime = function(time, geoTime) {
+        let 
+            rawOffset = geoTime.rawOffset,
+            dstOffset = geoTime.dstOffset,
+            localTime
+        ;
+        
+        //Calculate the time from offsets
+        localTime = new Date((time + dstOffset + rawOffset) * 1000);
+
+        return atLeastTwoDigits(localTime.getUTCHours()) + ":" + atLeastTwoDigits(localTime.getUTCMinutes());
+    }
+
     that.commands = {
-        "/fact": function(input, user, message) {
+        "/time": function(input, user, message, isHelp) {
 
-            if(FactPlugin.parseSubCommand(that.subCommands)(input, user, message)) return;
+            //Validate user input
+            if(!input || input == "" || isHelp) {
+                var msg = TimePlugin.helpMessage(); 
 
-            var msg = FactPlugin.helpMessage(); 
+                that.bot.emit("do:commandResponsePM", msg.str, user, {
+                    htmlMessage: msg.html
+                });
 
-            that.bot.emit("do:commandResponsePM", msg.str, user, {
-                htmlMessage: msg.html
+                return;
+            }
+
+            let utctime = Math.floor(Date.now() / 1000), addr = input.trim(); // In seconds for google api
+
+            that.getGeolocation(input, function(err, geo){
+                if(err) {
+                    that.bot.emit("error", err);
+                }
+
+                if(!geo) {
+                    return that.bot.emit("do:commandResponse", "Couldn't find a place called " + addr + ".");
+                }
+                
+                that.getGeoTime(utctime, geo, function(err, result){
+                    if(err || !result) {
+                        if(err) that.bot.emit("error", err);
+                        return that.bot.emit("do:commandResponsePM", "Sorry, couldn't find timezone info for " + addr + ".");
+                    }
+
+                    let response = "Current time in " + addr + " is " + that.formatGeoTime(utctime, result) + ".";
+                    
+                    that.bot.emit("do:commandResponse", response);
+
+                });
             });
+
+            
         }
     };
 
     return that;
 };
 
-FactPlugin.help = _help;
-FactPlugin.description = _description;
+TimePlugin.help = _help;
+TimePlugin.description = _description;
 
+module.exports = TimePlugin;
 
-module.exports = FactPlugin;
+// This can be tested locally, like so:
 
-
-// FactPlugin.helpMessage = function(name, help, description){
+// TimePlugin.helpMessage = function(name, help, description){
 //     return {
 //         html: "Nice Help",
 //         str: "Nice Help"
 //     }
 // };
 
-// FactPlugin.parseSubCommand = function (subcommands) {
-
-//     return function(input, user, message){
-
-//         var 
-//             inputArr = input.split(" "), 
-//             sub = inputArr[0]
-//         ;
-
-//         if(input && sub &&  subcommands[sub]) {
-//             return subcommands[sub](inputArr.slice(1).join(" "), user, message);
-//         }
-
-//     };
-// };
 
 
-// ////This can be tested locally, like so:
-// var DJ = new FactPlugin({
-//    bot:{
-//        on: console.log,
-//        emit: console.log,
-//        user: {
-//          username: "botname",
-//          uri: "123"
-//        }
-//    }
+// var TP = new TimePlugin({
+//     bot:{
+//         on: console.log,
+//         emit: console.log
+//     },
+//     currentTrack: {
+//         artists: [
+//             {
+//                 name: "Cage The Elephant"
+//             }
+//         ],
+//         name: "James Brown"
+//     }
 // });
 
-// DJ.commands["/fact"]("today", {}, "/fact today");
-// DJ.commands["/fact"]("num 2", {}, "/fact num 2");
-// DJ.commands["/fact"]("year 1999", {}, "/fact year 1999");
+// TP.commands["/time"]("Las Vegas, NV", {uri: "123"});
+// TP.commands["/time"]("fresno", {uri: "123"});
+// TP.commands["/time"]("asdfasdf", {uri: "123"});
+// TP.commands["/time"]("123", {uri: "123"});
+// TP.commands["/time"]("JJJFDKI8888****", {uri: "123"});
+// TP.commands["/time"]("help", {uri: "123"}, "/time help", true);
