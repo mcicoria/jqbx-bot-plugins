@@ -8,9 +8,11 @@ var SingleStringPlugin = function(data, config){
     Object.assign(that.config, data.config, config || {});
 
     phrases = {
-        "/shrug": "¯\\_(ツ)_/¯",
+        "/rawr": "RAWR",
         "/sheesh": "sheeeeeeeeeeesh",
+        "/shrug": "¯\\_(ツ)_/¯",
         "/shots": "SHOTS",
+        "/wait": "wait",
         "/1": "Never outshine the master",
         "/2": "Never put too much trust in friends, learn how to use enemies",
         "/3": "Conceal your intentions",
