@@ -9,6 +9,7 @@ var SingleStringPlugin = function(data, config){
 
     phrases = {
         "/shrug": "¯\\_(ツ)_/¯",
+        "/sheesh": "sheeeeeeeeeeesh",
         "/shots": "SHOTS",
         "/1": "Never outshine the master",
         "/2": "Never put too much trust in friends, learn how to use enemies",
