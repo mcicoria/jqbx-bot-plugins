@@ -44,12 +44,13 @@ var TimePlugin = function(data){
                 else return done(null, null);
             }
 
-            var lat, lng; 
+            var lat, lng, formatted_address; 
 
             lat = body.results[0].geometry.location.lat;
             lng = body.results[0].geometry.location.lng;
+            formatted_address = body.results[0].formatted_address;
 
-            return done(null, { lat: lat, lng: lng });
+            return done(null, { lat: lat, lng: lng, formatted_address: formatted_address });
 
         });
     };
@@ -124,7 +125,7 @@ var TimePlugin = function(data){
                         return that.bot.emit("do:commandResponsePM", "Sorry, couldn't find timezone info for " + addr + ".");
                     }
 
-                    let response = "Current time in " + addr + " is " + that.formatGeoTime(utctime, result) + ".";
+                    let response = "Current time in " + geo.formatted_address + " is " + that.formatGeoTime(utctime, result) + ".";
                     
                     that.bot.emit("do:commandResponse", response);
 
@@ -151,9 +152,9 @@ module.exports = TimePlugin;
 //         str: "Nice Help"
 //     }
 // };
-
-
-
+// 
+// 
+// 
 // var TP = new TimePlugin({
 //     bot:{
 //         on: console.log,
@@ -168,10 +169,11 @@ module.exports = TimePlugin;
 //         name: "James Brown"
 //     }
 // });
-
+// 
 // TP.commands["/time"]("Las Vegas, NV", {uri: "123"});
 // TP.commands["/time"]("fresno", {uri: "123"});
 // TP.commands["/time"]("asdfasdf", {uri: "123"});
 // TP.commands["/time"]("123", {uri: "123"});
 // TP.commands["/time"]("JJJFDKI8888****", {uri: "123"});
 // TP.commands["/time"]("help", {uri: "123"}, "/time help", true);
+// TP.commands["/time"]("Brīvības piemineklis", {uri: "123"});
