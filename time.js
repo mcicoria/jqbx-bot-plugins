@@ -1,5 +1,6 @@
 var request = require('request');
 var config = require('../config');
+var countries = require('country-list')();
 
 const apikey = config.google.key;
 
@@ -24,6 +25,7 @@ var TimePlugin = function(data){
     var that = this;
 
     that.bot = data.bot;
+    that.data = data;
 
     that.help = _help;
 
@@ -108,6 +110,21 @@ var TimePlugin = function(data){
                 return;
             }
 
+            if(input && input.charAt(0) == "@") {
+                if(that.data.room && that.data.room.users) {
+
+                    var requestedUser = that.data.room.users.find(function(u){
+                        var uname = u.username || u.id || u.uri.split(":")[2];
+
+                        return (uname && "@"+uname.trim().toLowerCase() == input.toLowerCase().trim());
+                    });
+
+                    if(requestedUser && requestedUser.country) {
+                        input = countries.getName(requestedUser.country||"GB");
+                    }
+                }
+            }
+
             let utctime = Math.floor(Date.now() / 1000), addr = input.trim(); // In seconds for google api
 
             that.getGeolocation(input, function(err, geo){
@@ -116,7 +133,7 @@ var TimePlugin = function(data){
                 }
 
                 if(!geo) {
-                    return that.bot.emit("do:commandResponse", "Couldn't find a place called " + addr + ".");
+                    return that.bot.emit("do:commandResponseNotice", "Couldn't find a place called " + addr + ".");
                 }
                 
                 that.getGeoTime(utctime, geo, function(err, result){
@@ -127,7 +144,7 @@ var TimePlugin = function(data){
 
                     let response = "Current time in " + geo.formatted_address + " is " + that.formatGeoTime(utctime, result) + ".";
                     
-                    that.bot.emit("do:commandResponse", response);
+                    that.bot.emit("do:commandResponseNotice", response);
 
                 });
             });
@@ -152,9 +169,9 @@ module.exports = TimePlugin;
 //         str: "Nice Help"
 //     }
 // };
-// 
-// 
-// 
+
+
+
 // var TP = new TimePlugin({
 //     bot:{
 //         on: console.log,
@@ -167,9 +184,18 @@ module.exports = TimePlugin;
 //             }
 //         ],
 //         name: "James Brown"
+//     },
+//     room: {
+//         users: [
+//             {
+//                 username: "testbro", 
+//                 uri: "testbro",
+//                 country: "SG"
+//             }
+//         ]
 //     }
 // });
-// 
+
 // TP.commands["/time"]("Las Vegas, NV", {uri: "123"});
 // TP.commands["/time"]("fresno", {uri: "123"});
 // TP.commands["/time"]("asdfasdf", {uri: "123"});
@@ -177,3 +203,5 @@ module.exports = TimePlugin;
 // TP.commands["/time"]("JJJFDKI8888****", {uri: "123"});
 // TP.commands["/time"]("help", {uri: "123"}, "/time help", true);
 // TP.commands["/time"]("Brīvības piemineklis", {uri: "123"});
+// TP.commands["/time"]("Brīvības piemineklis", {uri: "123"});
+// TP.commands["/time"]("@testbro", {uri: "123"}, "@testbro");
