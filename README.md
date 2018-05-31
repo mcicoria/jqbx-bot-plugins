@@ -1,12 +1,12 @@
 # JQBX Bot Plugins
 
-Plugins for the bots that live on JQBX (https://www.jqbx.fm/). JQBX lets you play music online through Spotify with anyone, anywhere. Be a virtual dj, and discover new music by listening together in real time. 
+Plugins for the bots that live on JQBX (https://www.jqbx.fm/). JQBX lets you play music online through Spotify with anyone, anywhere. Be a virtual dj, and discover new music by listening together in real time.
 
-Feel free to submit a pull request. 
+Feel free to submit a pull request.
 
 ## JQBX Bot Commands
 
-The latest commands can be seen by sending ```/help``` in chat. 
+The latest commands can be seen by sending ```/help``` in chat.
 
 | Command | Description |
 | ------------------------------- | --- |
@@ -15,6 +15,7 @@ The latest commands can be seen by sending ```/help``` in chat.
 |   /artist |   Get the current artist information, if available.   |
 |   /artist [name]  |   Get a specific artist's information, if available.  |
 |   /auto-artist    |   Toggle automatic artist info for every new track.   |
+|   /audiohelp    |   Will try to help you with your audio issues.   |
 |   /btc    |   Get the current price of Bitcoin    |
 |   /dadjoke [search]   |   Get a dad joke! Will give a random joke if you do not use a search term. - by @Captian Internet |
 |   /down   |   The bot will stop DJing |
@@ -65,7 +66,7 @@ The latest commands and a full list of available plugins can be seen by sending 
 
 
 #### Plugin Commands
-Enable and disable plugins with /config plugins. Do not include the [ and ] characters.  
+Enable and disable plugins with /config plugins. Do not include the [ and ] characters.
 
 | Command | Description |
 | ------------------------------- | --- |
@@ -76,7 +77,7 @@ Enable and disable plugins with /config plugins. Do not include the [ and ] char
 
 
 #### Bot Settings Commands
-Configure your bot with /config set. Do not include the [ and ] characters.  
+Configure your bot with /config set. Do not include the [ and ] characters.
 
 | Command | Description |
 | ------------------------------- | --- |
@@ -88,13 +89,13 @@ Configure your bot with /config set. Do not include the [ and ] characters.
 
 # Documentation
 
-Plugins contributed to this repo will be applied to all bots on JQBX. Currently, this is the only way to contribute to code to JQBX as there is no timeline for an open API or source. 
+Plugins contributed to this repo will be applied to all bots on JQBX. Currently, this is the only way to contribute to code to JQBX as there is no timeline for an open API or source.
 
 ## Bot Object
-The current bot information 
+The current bot information
 
 ```
-var bot = that.bot; 
+var bot = that.bot;
 
 /**
     bot.user (the current bot user info)
@@ -106,10 +107,10 @@ var bot = that.bot;
 ```
 
 ## Room Object
-The current room information. 
- 
+The current room information.
+
 ```
-/** 
+/**
 
     that.room.djs is an array of users and index 0 is the current dj
     [
@@ -128,11 +129,11 @@ The current room information.
             votes: []
         },
         // ...
-    ] 
+    ]
 
     that.room.users is an array
-    [ 
-        { 
+    [
+        {
             username: 'displaynname',
             id: '12345678',
             uri: 'spotify:user:12345678',
@@ -143,28 +144,28 @@ The current room information.
             device: 'desktop', //mobile, bot
             status: 'active',
             country: 'US'
-        }, 
-        // ... 
+        },
+        // ...
      ]
 **/
 ```
 
 ## Events
 
-A quick list of events to listen on and emit. 
+A quick list of events to listen on and emit.
 
- 
+
 ### Listening
 
 #### next-track
-The track about to start playing. 
- 
+The track about to start playing.
+
 ```
 that.bot.on("next-track", function(data){
     var track = data.nextTrack;
     /**
         data is an object like:
-            { nextTrack: { 
+            { nextTrack: {
                 _id: '5a91123123123123',
               album:
                { images: [ { height: 300,
@@ -198,15 +199,15 @@ that.bot.on("next-track", function(data){
 ```
 
 #### new-roomies
-People who just joined the room.  
-  
+People who just joined the room.
+
 ```
 that.bot.on("new-roomies", function(users){
-    
+
     /**
         users is an array like:
-        [ 
-            { 
+        [
+            {
                 username: 'displayname',
                 id: '123456',
                 uri: 'spotify:user:12345678',
@@ -226,10 +227,10 @@ that.bot.on("new-roomies", function(users){
 
 #### regions
 Regions updated with all user's regions in the room.
- 
+
 ```
 that.bot.on("regions", function(regions){
-    /** 
+    /**
         regions is an array of region codes in the current room
         ["US", "AU", "GB"]
     **/
@@ -237,12 +238,12 @@ that.bot.on("regions", function(regions){
 ```
 
 ### Emitting
-These are sent via ```that.bot.emit("event", data)```.  
+These are sent via ```that.bot.emit("event", data)```.
 
 
 #### do:commandResponse
 
-Send a message to chat from the bot. 
+Send a message to chat from the bot.
 
 ```
 var opts = {
@@ -252,22 +253,22 @@ var opts = {
 
 that.bot.on("do:commandResponse", message, htmlMessage);
 ```
- 
-Sends a prviate message to chat.  
+
+Sends a prviate message to chat.
 ```
 that.bot.on("do:commandResponsePM", message, recipients, opts);
 that.bot.emit("do:commandResponsePM", "Message", user, {
     htmlMessage: "html version"
 });
 ```
- 
-Sends a notice to chat like "user has become a Dj." 
+
+Sends a notice to chat like "user has become a Dj."
 
 ```
 that.bot.on("do:commandResponseNotice", message, opts);
 ```
 
-Sends an expandable message to chat. 
+Sends an expandable message to chat.
 ```
 that.bot.on("do:commandResponseExpandable", message, opts);
 
