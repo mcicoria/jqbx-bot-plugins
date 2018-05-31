@@ -44,4 +44,4 @@ module.exports = AudoHelp;
 //     }
 // });
 
-// DJ.commands["/compliment"]("", {});
+// DJ.commands["/audiohelp"]();
