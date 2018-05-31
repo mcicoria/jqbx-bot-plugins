@@ -10,7 +10,7 @@ const HELP = "Try clicking the Sync Audio button, wait 10 seconds. If that doesn
   "Consider restarting the app and spotify. " +
   "If all else fails use /relink to get a direct to spotify link and follow along until the server cools down.";
 
-var AudoHelp = function (data) {
+var AudioHelp = function (data) {
 
   var that = this;
 
@@ -31,13 +31,13 @@ var AudoHelp = function (data) {
   return that;
 };
 
-AudoHelp.help = _help;
-AudoHelp.description = _description;
+AudioHelp.help = _help;
+AudioHelp.description = _description;
 
-module.exports = AudoHelp;
+module.exports = AudioHelp;
 
 // This can be tested locally, like so:
-// var DJ = new AudoHelp({
+// var DJ = new AudioHelp({
 //     bot:{
 //         on: console.log,
 //         emit: console.log
