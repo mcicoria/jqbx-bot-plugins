@@ -250,7 +250,7 @@ var opts = {
     type: "expandable" //alert, null
 }
 
-that.bot.on("do:commandResponse", message, htmlMessage);
+that.bot.on("do:commandResponse", message, opts);
 ```
  
 Sends a prviate message to chat.  
