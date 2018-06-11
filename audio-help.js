@@ -8,7 +8,7 @@ const
 const HELP = "Try clicking the Sync Audio button, wait 10 seconds. If that doesn't work, click the" +
   " devices icon in the top right to check its sending audio to the right location. " +
   "Consider restarting the app and spotify. " +
-  "If all else fails use /relink to get a direct to spotify link and follow along until the server cools down.";
+  "If all else fails use /relink to get a direct to spotify link and follow along until the server cools down. Not available in your region? Use /yt to get a YouTube link.";
 
 var AudioHelp = function (data) {
 
