@@ -14,10 +14,10 @@ var AlbumPlugin = function(data){
 
 	var that = this;
 	that.data = data;
-
 	that.bot = data.bot;
-
 	that.help = _help;
+
+	//Gets the album name, with error handling for albums that have been taken down, or the case of no album name
 	function getAlbum(user){
 		var AlbumName = that.data.currentTrack.album.name;
 		if (!AlbumName){
@@ -40,13 +40,9 @@ var AlbumPlugin = function(data){
 	return that;
 };
 
-
-
 AlbumPlugin.help = _help;
 AlbumPlugin.description = _description;
-
 module.exports = AlbumPlugin;
-
 
 /*
 
