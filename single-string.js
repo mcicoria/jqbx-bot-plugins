@@ -13,6 +13,7 @@ var SingleStringPlugin = function(data, config){
         "/shrug": "¯\\_(ツ)_/¯",
         "/shots": "SHOTS",
         "/wait": "wait",
+        "/x": "JASON!",
         "/1": "Never outshine the master",
         "/2": "Never put too much trust in friends, learn how to use enemies",
         "/3": "Conceal your intentions",
