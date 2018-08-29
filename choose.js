@@ -19,9 +19,15 @@ var DecisionMakerPlugin = function (data) {
         var str = input;
         var array = str.split(',');
         var randomNumber = Math.floor(Math.random()*array.length);
+        if(array[randomNumber].trim() == ''){
+            that.bot.emit("do:commandResponseExpandable", 'I am unable to make a choice.');
 
-        var decision = array[randomNumber];
-        that.bot.emit("do:commandResponseExpandable", decision);
+        } else {
+            var decision = 'Beep boop. Choosing ' + array[randomNumber].trim();
+
+            that.bot.emit("do:commandResponseExpandable", decision);
+        }
+        
 
     }
 
@@ -42,11 +48,11 @@ DecisionMakerPlugin.description = _description;
 module.exports = DecisionMakerPlugin;
 
 //This can be tested locally, like so:
-// var oracle = new DecisionMakerPlugin({
-//     bot:{
-//         on: console.log,
-//         emit: console.log
-//     }
-// });
+var oracle = new DecisionMakerPlugin({
+    bot:{
+        on: console.log,
+        emit: console.log
+    }
+});
 
-// oracle.commands["/choose"]("one, two, three", {});
+oracle.commands["/choose"]("one, two, three", {});
