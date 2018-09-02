@@ -69,7 +69,7 @@ var nockoutPlugin = function(data){
     return that;
 };
 
-//module.exports = nockoutPlugin;
+module.exports = nockoutPlugin;
 /* TESTING
 var NP = new nockoutPlugin({
     bot:{
