@@ -9,7 +9,7 @@ var SingleStringPlugin = function(data, config){
 
     phrases = {
         "/rawr": "RAWR",
-        "/clap": String.fromCodePoint(0x1F44F),
+        "/clap": ":clap: :clap: :clap:",
         "/sheesh": "sheeeeeeeeeeesh",
         "/shrug": "¯\\_(ツ)_/¯",
         "/shots": "SHOTS",
