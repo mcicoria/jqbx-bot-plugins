@@ -1,4 +1,3 @@
-var request = require("request");
 
 // Gotta setup our votes!
 var voteNope = 0;
@@ -7,15 +6,21 @@ var requiredVotesNope = 3;
 // We want to keep a list of spotifyURIs of the nopeOut requestorsNope -- this way we can have three unique votes
 var requestorsNope = [];
 
+const 
+    _description = "Votes for the bot to downvote (nope) a song. Requires 3 people. – by Dynasto",
+    _help = {
+        "/no": "Votes for the bot to downvote (nope) a song. Requires 3 people. – by Dynasto"
+    }
+;
+
 var nockoutPlugin = function(data){
     
     var that = this;
 
     that.bot = data.bot;
+    that.data = data;
     
-    that.help = {
-            "/no": "Votes for the bot to downvote (nope) a song. Requires 3 people."
-        };
+    that.help = _help;
     
     function processVote (spotifyURI){
         voteNope++;     
@@ -29,7 +34,7 @@ var nockoutPlugin = function(data){
     }
     
     function nopeOut(){
-        that.bot.emit("do:nope", that.bot.user);
+        that.bot.emit("do:lame");
         that.bot.emit("do:commandResponse",":-1:, :-1:, :-1:");
     }
     
@@ -68,6 +73,10 @@ var nockoutPlugin = function(data){
     
     return that;
 };
+
+nockoutPlugin.help = _help;
+nockoutPlugin.description = _description;
+
 
 module.exports = nockoutPlugin;
 /* TESTING
