@@ -48,11 +48,11 @@ DecisionMakerPlugin.description = _description;
 module.exports = DecisionMakerPlugin;
 
 //This can be tested locally, like so:
-var oracle = new DecisionMakerPlugin({
-    bot:{
-        on: console.log,
-        emit: console.log
-    }
-});
+// var oracle = new DecisionMakerPlugin({
+//     bot:{
+//         on: console.log,
+//         emit: console.log
+//     }
+// });
 
-oracle.commands["/choose"]("one, two, three", {});
+// oracle.commands["/choose"]("one, two, three", {});
