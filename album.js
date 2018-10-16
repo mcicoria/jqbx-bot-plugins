@@ -20,6 +20,8 @@ var AlbumPlugin = function(data){
 	//Gets the album name, with error handling for albums that have been taken down, or the case of no album name
 	function getAlbum(user){
 		var AlbumName = that.data.currentTrack.album.name;
+		var SongName = that.data.currentTrack.name;
+		var AlbumLink = that.data.currentTrack.album.uri;
 		if (!AlbumName){
 			that.bot.emit("do:commandResponsePM", "There's been an error, please raise an issue at https://github.com/mcicoria/jqbx-bot-plugins/issues specifying what song caused this error.", user);
 		}
@@ -27,8 +29,9 @@ var AlbumPlugin = function(data){
 			that.bot.emit("do:commandResponse", "The album has appeared to have been taken down.");
 		}
 		else if (AlbumName){
-			that.bot.emit("do:commandResponse", "The current song is from the album " + AlbumName)
-		}
+			that.bot.emit("do:commandResponse", "The song " + SongName " is from the album: " + AlbumName)
+			that.bot.emit("do:commandResponseExpandable", str, {htmlMessage: AlbumLink
+		})
 
 	};
 
