@@ -15,6 +15,10 @@ var SingleStringPlugin = function(data, config){
         "/shots": "SHOTS",
         "/wait": "wait",
         "/x": "JASON!",
+        "/audiohelp": "Try clicking the Sync Audio button, wait 10 seconds. If that doesn't work, click the" +
+  " devices icon in the top right to check its sending audio to the right location. " +
+  "Consider restarting the app and spotify. " +
+  "If all else fails use /relink to get a direct to spotify link and follow along until the server cools down. Not available in your region? Use /yt to get a YouTube link.";,
         "/1": "Never outshine the master",
         "/2": "Never put too much trust in friends, learn how to use enemies",
         "/3": "Conceal your intentions",
