@@ -17,6 +17,7 @@ The latest commands can be seen by sending ```/help``` in chat.
 |   /auto-artist    |   Toggle automatic artist info for every new track.   |
 |   /audiohelp    |   Will try to help you with your audio issues.   |
 |   /btc    |   Get the current price of Bitcoin    |
+|   /clap   |   Claps in chat. - by Dynasto |
 |   /dadjoke [search]   |   Get a dad joke! Will give a random joke if you do not use a search term. - by @Captian Internet |
 |   /down   |   The bot will stop DJing |
 |   /fact num [#]   |   Specify a number to get a fact about it, or input nothing for a random number fact. - by @Waddle Bird   |
@@ -38,7 +39,9 @@ The latest commands can be seen by sending ```/help``` in chat.
 |   /joke submit 'joke' 'punchline' |   Your joke will be submitted to the joke pool. The best each month will be saved forever. Max 3 jokes per person each month. [Web/Desktop Only] Submit privately with /w @botname /joke submit ...   |
 |   /joke top   |   Get the top jokesters for the current joke pool.    |
 |   /lastfm |   View lastfm url and status. |
+|   /lyrics |   Whispers the lyrics to the current song to you. - by Julian |
 |   /me [action]    |   Do something as you. Ex: /me dances |
+|   /no |   Votes for the bot to nope out a song. Requires 3 votes. - by Dynasto    |
 |   /queue  |   See what the bot's next tracks will be  |
 |   /queue build    |   Add tracks to the bot's queue   |
 |   /queue clear    |   Clear the tracks in the bot's queue |
