@@ -18,28 +18,27 @@ var nockoutPlugin = function(data){
     var that = this;
 
     that.bot = data.bot;
-    that.data = data;
     
     that.help = _help;
     
-    function processVote (spotifyURI){
+    function processVoteNope (spotifyURI){
         voteNope++;     
         requestorsNope.push(spotifyURI);
     }
     
     // call this on the event when a song changes
-    function resetVote(){
+    function resetVoteNope () {
         voteNope = 0;
         requestorsNope = [];
     }
     
     function nopeOut(){
         that.bot.emit("do:lame");
-        that.bot.emit("do:commandResponse",":-1:, :-1:, :-1:");
+        that.bot.emit("do:commandResponse","no, no, no :-1: no way José!!");
     }
     
     // Check against the list of spotify URI to make sure we only count votes for unique users
-    function checkNames(spotifyURI){
+    function checkNamesNope(spotifyURI){
         var strLen = requestorsNope.length;
         for (i = 0; i < strLen; i++) {
             if(spotifyURI == requestorsNope[i])
@@ -51,13 +50,13 @@ var nockoutPlugin = function(data){
     
     that.commands = {
         "/no": function(input, user) {
-            if(voteNope < requiredVotesNope && checkNames(user.uri)){
-                processVote(user.uri);
+            if(voteNope < requiredVotesNope && checkNamesNope(user.uri)){
+                processVoteNope(user.uri);
                 if(voteNope >= requiredVotesNope){
                     nopeOut();
                 }
-                if(voteNope == 1) that.bot.emit("do:commandResponse",":-1:");
-                if(voteNope == 2) that.bot.emit("do:commandResponse",":-1:, :-1:");
+                if(voteNope == 1) that.bot.emit("do:commandResponse","no");
+                if(voteNope == 2) that.bot.emit("do:commandResponse","no, no");
             }else{
                 var str = "I'm either already hating this, or you already voted.";
                 that.bot.emit("do:commandResponse", str, null, null, null, null, null, [
@@ -69,7 +68,7 @@ var nockoutPlugin = function(data){
         }
     };
     
-    that.bot.on("next-track", resetVote); 
+    that.bot.on("next-track", resetVoteNope); 
     
     return that;
 };
@@ -77,9 +76,9 @@ var nockoutPlugin = function(data){
 nockoutPlugin.help = _help;
 nockoutPlugin.description = _description;
 
-
 module.exports = nockoutPlugin;
-/* TESTING
+/*
+// TESTING
 var NP = new nockoutPlugin({
     bot:{
         emit: console.log
@@ -89,4 +88,5 @@ var NP = new nockoutPlugin({
 NP.commands["/no"]("124", {uri:"123"});
 NP.commands["/no"]("125", {uri:"124"});
 NP.commands["/no"]("126", {uri:"125"});
+
 */
