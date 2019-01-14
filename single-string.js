@@ -10,6 +10,7 @@ var SingleStringPlugin = function(data, config){
     phrases = {
         "/rawr": "RAWR",
         "/clap": ":clap: :clap: :clap:",
+        "/care": "https://media2.giphy.com/media/yoJC2suV6hS7hqi796/giphy.gif",
         "/sheesh": "sheeeeeeeeeeesh",
         "/shrug": "¯\\_(ツ)_/¯",
         "/shots": "SHOTS",
