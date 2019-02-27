@@ -1,0 +1,20 @@
+const
+    _description = "Hutton - by astonavfc",
+    _help = {
+        "/hutton": "Just type it dude wtf - by astonavfc"
+    }
+;
+
+var hutton = function(data) {
+  var that = this;
+    that.bot = data.bot;
+    that.help = _help;
+    const str = "https://media.giphy.com/media/lK0CIdsGsCNGUCjkpp/giphy.gif";
+    that.bot.emit("do:commandResponseExpandable", str);
+    return that;
+};
+
+hutton.help = _help;
+hutton.description = _description;
+
+module.exports = hutton;
