@@ -27,6 +27,9 @@ var LyricsPlugin = function (data) {
                     //get lyrics for this song
                     that.bot.emit("do:commandResponse", 'https://genius.com'+data.hits[0].result.api_path);
                 }
+                else {
+                    that.bot.emit("do:commandResponse", 'No lyrics found. You should transcribe them here: https://genius.com/new');
+                }
             }
         }
     }
