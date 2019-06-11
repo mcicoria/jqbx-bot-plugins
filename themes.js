@@ -20,7 +20,7 @@ var ThemesPlugin = function(data){
     that.bot = data.bot;
     that.help = _help;
 
-    //Gets the album name, with error handling for albums that have been taken down, or the case of no album name
+    //Gets a random theme from the themes array
     function getTheme(user){
 
         var thisTheme = getRandomTheme();
