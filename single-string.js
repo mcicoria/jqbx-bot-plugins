@@ -12,9 +12,11 @@ var SingleStringPlugin = function(data, config){
         "/clap": ":clap: :clap: :clap:",
         "/sheesh": "sheeeeeeeeeeesh",
         "/shrug": "¯\\_(ツ)_/¯",
+        "/lenny": "( ͡° ͜ʖ ͡°)",
         "/shots": "SHOTS",
         "/wait": "wait",
         "/x": "JASON!",
+        "/j": "J U I C E",
         "/1": "Never outshine the master",
         "/2": "Never put too much trust in friends, learn how to use enemies",
         "/3": "Conceal your intentions",
@@ -62,7 +64,9 @@ var SingleStringPlugin = function(data, config){
         "/45": "Preach the need for change, but never reform too much at once.",
         "/46": "Never appear too perfect. — Only gods and the dead can seem perfect with impunity.",
         "/47": "Do not go past the mark you aimed for — in victory, learn when to stop.",
-        "/48": "Assume formlessness."
+        "/48": "Assume formlessness.",
+        "/69": "Nice.",
+        "/420": "Drugs are bad."
     };
 
     that.commands = {}
